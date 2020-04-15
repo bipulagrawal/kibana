@@ -1,0 +1,67 @@
+{
+  "trigger": {
+    "schedule": {
+      "interval": "10s"
+    }
+  },
+  "input": {
+    "search": {
+      "request": {
+        "search_type": "query_then_fetch",
+        "indices": [
+          "data-index-*"
+        ],
+        "rest_total_hits_as_int": true,
+        "body": {
+          "size": 0,
+          "query": {
+            "bool": {
+              "must": [
+                {
+                  "match": {
+                    "component": "Test Data"
+                  }
+                },
+                {
+                  "range": {
+                    "@timestamp": {
+                      "gte": "now-24h",
+                      "lte": "now"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "aggs": {
+            "component": {
+              "terms": {
+                "field": "errorType"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "condition": {
+    "compare" : {
+		"ctx.payload.aggregations.component.buckets.0.doc_count" : {"gt" : 1}
+	}
+  },
+  "actions": {
+    "email_admin": {
+      "email": {
+        "profile": "standard",
+        "priority": "high",
+        "to": [
+          "test@domain.com"
+        ],
+        "subject": "Test Aggregation",
+        "body": {
+          "html": "Test Error Count for {{ctx.payload.aggregations.component.buckets.0.key}} is {{ctx.payload.aggregations.component.buckets.0.doc_count}}"
+        }
+      }
+    }
+  }
+}
