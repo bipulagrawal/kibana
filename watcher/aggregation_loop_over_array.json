@@ -1,0 +1,73 @@
+{
+  "trigger": {
+    "schedule": {
+      "interval": "5m"
+    }
+  },
+  "input": {
+    "search": {
+      "request": {
+        "search_type": "query_then_fetch",
+        "indices": [
+          "data-*"
+        ],
+        "rest_total_hits_as_int": true,
+        "body": {
+          "size": 0,
+          "query": {
+            "bool": {
+              "must": [
+                {
+                  "match": {
+                    "type": "error"
+                  }
+                },
+                {
+                  "range": {
+                    "@timestamp": {
+                      "gte": "now-1h",
+                      "lte": "now"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "aggs": {
+            "my_error": {
+              "terms": {
+                "field": "errormessage.keyword"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "condition": {
+    "array_compare": {
+      "ctx.payload.aggregations.my_error.buckets": {
+        "path": "doc_count",
+        "gt": {
+          "value": 50,
+          "quantifier": "some"
+        }
+      }
+    }
+  },
+  "actions": {
+    "email_admin": {
+      "email": {
+        "profile": "standard",
+        "priority": "high",
+        "to": [
+          "test@test.com"
+        ],
+        "subject": "My Error Details",
+        "body": {
+          "html": "My Error Details are as below: <table style='border:1px solid;border-collapse:collapse;'><tr><th style='border:1px solid;border-collapse:collapse; width:100px'>Error Message</th><th style='border:1px solid;border-collapse:collapse; width:100px'>Count</th></tr>{{#ctx.payload.aggregations.my_error.buckets}}<tr><td style='border:1px solid;border-collapse:collapse;'>{{key}}</td><td style='border:1px solid;border-collapse:collapse;'>{{doc_count}}</td></tr>{{/ctx.payload.aggregations.my_error.buckets}}</table>"
+        }
+      }
+    }
+  }
+}
