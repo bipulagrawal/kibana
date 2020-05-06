@@ -1,0 +1,35 @@
+#Get all the employees with country as India and emp_id as 10 or 11
+#OR is spelled should
+#AND is spelled must
+#NOR is spelled should_not
+
+GET my-index/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "term": {
+            "country.keyword": "India"
+          }
+        },
+        {
+          "bool": {
+            "should": [
+              {
+                "term": {
+                  "emp_id": "10"
+                }
+              },
+              {
+                "term": {
+                  "emp_id": "11"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
