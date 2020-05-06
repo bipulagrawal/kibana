@@ -1,0 +1,14 @@
+#range query api
+
+
+GET my-index/_search
+{
+  "query": {
+    "range": {
+      "age": {
+        "gte": 30,
+        "lte": 50
+      }
+    }
+  }
+}
