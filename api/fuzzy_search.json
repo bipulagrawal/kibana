@@ -1,0 +1,17 @@
+#fuzzy search
+#fuzziness count shows the number of characters that can be changed to achieve the available value
+#prefix_length defines how many initial characters needs to stay as it is
+
+
+GET my-index/_search
+{
+  "query": {
+    "match": {
+      "name": {
+        "query": "bipul",
+        "fuzziness": 2,
+        "prefix_length": 2
+      }
+    }
+  }
+}
