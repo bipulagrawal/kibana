@@ -1,0 +1,11 @@
+#simple OR implementation
+
+
+GET my-index/_search
+{
+  "query": {
+    "match": {
+      "county": "(India) OR (Germany)"
+    }
+  }
+}
