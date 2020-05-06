@@ -1,0 +1,14 @@
+#using aggregations based on country
+
+
+GET my-index/_search
+{
+  "aggs": {
+    "component": {
+      "terms": {
+        "field": "country.keyword",
+        "size": 5
+      }
+    }
+  }
+}
