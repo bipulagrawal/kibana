@@ -1,0 +1,14 @@
+#range query api with timestamp to get the data from last 24h
+
+
+GET my-index/_search
+{
+  "query": {
+    "range": {
+      "@timestamp": {
+        "gte": "now-24h",
+        "lt": "now"
+      }
+    }
+  }
+}
