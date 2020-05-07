@@ -7,8 +7,7 @@ GET my-index/_search
   "aggs": {
     "my_agg": {
       "terms": {
-        "field": "country.keyword",
-        "size": 5
+        "field": "country.keyword"
       }
     }
   }
