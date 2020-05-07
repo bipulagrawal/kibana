@@ -1,0 +1,15 @@
+#using stat aggregations, to get the count, min, max, avg, sum.
+#Note: the field parameter should be of type number
+
+
+GET my-index/_search
+{
+  "size": 0,
+  "aggs": {
+    "quantity_stats": {
+      "stats": {
+        "field": "total_quantity"
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+#used to get the distinct count of a field
+
+GET my-index/_search
+{
+  "size": 0, 
+  "aggs": {
+    "my_error": {
+      "cardinality": {
+        "field": "errorType.keyword"
+      }
+    }
+  }
+}
