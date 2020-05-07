@@ -5,14 +5,14 @@ GET my-index/_search
 {
   "size": 0,
   "aggs": {
-    "my_filter": {
+    "gender_filter": {
       "filter": {
         "term": {
           "customer_gender": "MALE"
         }
       },
       "aggs": {
-        "my_filter1": {
+        "quantity_filter": {
           "value_count": {
             "field": "total_quantity"
           }
