@@ -1,6 +1,5 @@
 #using term aggregations, to get the total quantity purchased by Male customer
 
-
 GET my-index/_search
 {
   "size": 0,
